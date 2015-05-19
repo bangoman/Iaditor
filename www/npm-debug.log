@@ -1,0 +1,65 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', 'php5-gd' ]
+2 info using npm@1.3.11
+3 info using node@v0.10.21
+4 warn package.json sodyo_editor@1.0.0 No repository field.
+5 warn package.json sodyo_editor@1.0.0 No README data
+6 verbose readDependencies using package.json deps
+7 verbose cache add [ 'php5-gd', null ]
+8 verbose cache add name=undefined spec="php5-gd" args=["php5-gd",null]
+9 verbose parsed url { protocol: null,
+9 verbose parsed url   slashes: null,
+9 verbose parsed url   auth: null,
+9 verbose parsed url   host: null,
+9 verbose parsed url   port: null,
+9 verbose parsed url   hostname: null,
+9 verbose parsed url   hash: null,
+9 verbose parsed url   search: null,
+9 verbose parsed url   query: null,
+9 verbose parsed url   pathname: 'php5-gd',
+9 verbose parsed url   path: 'php5-gd',
+9 verbose parsed url   href: 'php5-gd' }
+10 silly lockFile 7e33fc84-php5-gd php5-gd
+11 verbose lock php5-gd /Users/Pintrips/.npm/7e33fc84-php5-gd.lock
+12 silly lockFile 7e33fc84-php5-gd php5-gd
+13 silly lockFile 7e33fc84-php5-gd php5-gd
+14 verbose addNamed [ 'php5-gd', '' ]
+15 verbose addNamed [ null, '*' ]
+16 silly lockFile 57da2171-php5-gd php5-gd@
+17 verbose lock php5-gd@ /Users/Pintrips/.npm/57da2171-php5-gd.lock
+18 silly addNameRange { name: 'php5-gd', range: '*', hasData: false }
+19 verbose url raw php5-gd
+20 verbose url resolving [ 'https://registry.npmjs.org/', './php5-gd' ]
+21 verbose url resolved https://registry.npmjs.org/php5-gd
+22 info trying registry request attempt 1 at 20:17:20
+23 http GET https://registry.npmjs.org/php5-gd
+24 http 404 https://registry.npmjs.org/php5-gd
+25 silly registry.get cb [ 404,
+25 silly registry.get   { date: 'Sun, 05 Apr 2015 17:17:57 GMT',
+25 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+25 silly registry.get     'content-type': 'application/json',
+25 silly registry.get     'cache-control': 'max-age=0',
+25 silly registry.get     'content-length': '51',
+25 silly registry.get     'accept-ranges': 'bytes',
+25 silly registry.get     via: '1.1 varnish',
+25 silly registry.get     age: '0',
+25 silly registry.get     'x-served-by': 'cache-fra1248-FRA',
+25 silly registry.get     'x-cache': 'MISS',
+25 silly registry.get     'x-cache-hits': '0',
+25 silly registry.get     'x-timer': 'S1428254277.057419,VS0,VE429',
+25 silly registry.get     'keep-alive': 'timeout=10, max=50',
+25 silly registry.get     connection: 'Keep-Alive' } ]
+26 silly lockFile 57da2171-php5-gd php5-gd@
+27 silly lockFile 57da2171-php5-gd php5-gd@
+28 error 404 'php5-gd' is not in the npm registry.
+28 error 404 You should bug the author to publish it
+28 error 404
+28 error 404 Note that you can also install from a
+28 error 404 tarball, folder, or http url, or git url.
+29 error System Darwin 14.0.0
+30 error command "node" "/usr/local/bin/npm" "install" "php5-gd"
+31 error cwd /Library/WebServer/Documents/sodyo_editor/www
+32 error node -v v0.10.21
+33 error npm -v 1.3.11
+34 error code E404
+35 verbose exit [ 1, true ]

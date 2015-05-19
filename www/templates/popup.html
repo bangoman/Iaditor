@@ -1,0 +1,23 @@
+<ion-list ng-show="showActionsList">
+  <ion-item ng-click="actionPage(action.value)" ng-repeat="action in actions">
+    {{action.name}}
+  </ion-item>
+</ion-list>
+<div ng-show="showPhone">
+    <label class="item item-input">
+      <span class="input-label">Phone</span>
+      <input ng-model="data.phone" type="text">
+    </label>
+</div>
+<div ng-show="showUrl">
+    <label class="item item-input">
+      <span class="input-label">Url</span>
+      <input ng-model="data.url" type="text">
+    </label>
+</div>
+<div ng-show="showAddress">
+    <label class="item item-input">
+      <span class="input-label">Address</span>
+      <input ng-model="data.address" type="text">
+    </label>
+</div>

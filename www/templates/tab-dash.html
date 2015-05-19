@@ -1,0 +1,24 @@
+
+<ion-view view-title="IAD Editor" cache-view="false">
+<ion-nav-buttons side="right">
+  <button ng-hide="showMarker" class="button" ng-click="saveActionsSet();">
+    Save
+  </button>
+  <button ng-show="showMarker" class="button" onclick="document.location='#/tab/chats?done=true'">
+    Done
+  </button>  
+</ion-nav-buttons>
+  <div id="container" ng-hide="showMarker" ng-style="iadImg" on-hold="actionPop($event)" style="width:100%;height:100%;margin-top:20px;border:1px solid #000000;margin:0 auto;background-color:#cccccc">
+  </div>  
+  <div ng-show="showMarker" style="height:100%;width:100%">
+    <img ng-src="{{markerImage}}" width="60%" style="margin-left:20%;margin-top:30%"/>
+    <img src="img/share.png" width="90%" style="margin-left:5%;margin-top:2%"/>
+
+  </div>
+  <!--
+  <div ng-show="showActionMenu" style="width:100%;height:100%;position:absolute;z-index:11111">
+    test
+  </div>
+-->
+ 
+</ion-view>

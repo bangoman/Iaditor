@@ -1,0 +1,34 @@
+<ion-view view-title="Iaditor" cache-view="false" >
+  <ion-nav-buttons side="right">
+    <button class="button" ng-click="zoom(1);">
+      +
+    </button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="left">
+    <button class="button" ng-click="zoom(-1)">
+      -
+    </button>
+  </ion-nav-buttons>
+
+    <div style="position:absolute;top:27;width:100%;height:100%;" ng-show="chooseImage">
+        <iframe style="width:100%;height:100%;" scrolling="no" src="uploadUi.html" ></iframe>
+    </div>  
+
+    <div ng-show="chooseImage" >
+      <span class="input-label">Image Url:</span>
+      <div class="row" ng-show="notNow">
+        <div class="col-75">
+          <input type="text"  placeholder="Url to image" ng-model="imageUrl">
+        </div>
+        <div class="col-25">          
+          <button  ng-click="checkImageUrl(imageUrl)" id="imgButton" class="button button-assertive">go</button>
+        </div>
+      </div>  
+
+    </div>
+    <div ng-hide="chooseImage">
+      <img id="img1" ng-src="{{imageUrl}}" ng-style="imgStyle" style="position:absolute;"  on-drag="dragging($event)" ></img>
+      <button class="button button-assertive" style="position:absolute;top:45%;left:45%;z-index:100" ng-click="crop(imageUrl)">Crop</button>
+    </div>
+</ion-view>
+ד
