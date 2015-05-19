@@ -29,7 +29,7 @@ function save_image(){
 
     $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     
-    $url = "http://$_SERVER[HTTP_HOST]/iaditor/www/" . $img_name;
+    $url = "http://$_SERVER[HTTP_HOST]/" . $img_name;
 
     $image = new ImageResize($imgUrl);
 
