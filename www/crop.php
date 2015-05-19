@@ -48,9 +48,9 @@ function crop(){
     $y = $_GET["y"];
     $x = $_GET["x"];
     $height = $_GET["height"];
-//    $image = new ImageResize($imgUrl);
-//    $image->resizeToHeight($height);
-//    $image->save("img/" . basename($imgUrl));    
+    $image = new ImageResize($imgUrl);
+    $image->resizeToHeight($height);
+    $image->save("img/" . basename($imgUrl));    
 
     if(exif_imagetype($imgUrl) == 2){      
         $src = imagecreatefromjpeg($imgUrl);
