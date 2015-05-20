@@ -29,7 +29,7 @@ function save_image(){
 
     $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     
-    $url = "http://$_SERVER[HTTP_HOST]/iaditor/www/" . $img_name;
+    $url = "http://$_SERVER[HTTP_HOST]/Iaditor/www/" . $img_name;
 
     $image = new ImageResize($imgUrl);
 
@@ -67,7 +67,7 @@ function crop(){
     //imagegif($dest);
     $img_name="img/cropped_". basename($imgUrl);
     //$img_name="img/". $rand . ".jpg";
-    $url = "http://$_SERVER[HTTP_HOST]/iaditor/www/" . $img_name;
+    $url = "http://$_SERVER[HTTP_HOST]/Iaditor/www/" . $img_name;
     imagejpeg ( $dest , $img_name , 100  );
     imagedestroy($dest);
     imagedestroy($src);

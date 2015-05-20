@@ -69,7 +69,7 @@ angular.module('iaditor', ['ionic', 'iaditor.controllers', 'iaditor.services'])
   $stateProvider
 
   // setup an abstract state for the tabs directive
-    .state('tab', {
+  .state('tab', {
     url: "/tab",
     abstract: true,
     templateUrl: "templates/tabs.html"
@@ -87,6 +87,16 @@ angular.module('iaditor', ['ionic', 'iaditor.controllers', 'iaditor.services'])
     }
   })
 
+  .state('tab.preview', {
+      url: '/preview',
+      views: {
+        'tab-preview': {
+          templateUrl: 'templates/tab-preview.html',
+          controller: 'PreviewCtrl'
+        }
+      }
+    })
+
   .state('tab.chats', {
       url: '/chats',
       views: {
@@ -96,6 +106,7 @@ angular.module('iaditor', ['ionic', 'iaditor.controllers', 'iaditor.services'])
         }
       }
     })
+
     .state('tab.chat-detail', {
       url: '/chats/:chatId',
       views: {
