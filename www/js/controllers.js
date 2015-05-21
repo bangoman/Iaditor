@@ -294,6 +294,8 @@ angular.module('iaditor.controllers', [])
 			});
 		}
 	}
+
+	
 })
 
 /* 
@@ -319,7 +321,7 @@ angular.module('iaditor.controllers', [])
 	// Check if $root.scope.marker exist 
 	if ( $rootScope.marker ) {
 		$http.get('http://test.sodyo.com/cms/ControlPanel/index.php/api/markerContent/3/?AppToken=c296b77eba4525f21ba3ff8776728ba4&AppPlugMarkerID=' + $rootScope.marker ).then(function( resp) {
-			console.log('Success', resp.data.ActionSets[0].ActionSetImage );
+			console.log('Success', resp.data );
 			// For JSON responses, resp.data contains the result
 			if ( resp.data.ActionSets[0].ActionSetImage ) {
 				// alert('working');
@@ -425,6 +427,21 @@ angular.module('iaditor.controllers', [])
 	 	//Fake customer data
 	 	$state.go('tab.dash');
 	}; 
+
+	// Rotate Image
+	$scope.rotAngle = 0;
+	$scope.angle = $scope.rotAngle;
+    $scope.rotate = function ( direction ) {
+
+    	if ( direction == 'left') {
+
+    		 $scope.angle = $scope.angle - 90 ;
+    	}else {
+    		 $scope.angle = $scope.angle + 90 ;
+    	};
+
+       
+    };
 })
 
 /* 

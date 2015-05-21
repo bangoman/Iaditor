@@ -27,8 +27,13 @@
 
     </div>
     <div ng-hide="chooseImage">
-      <img id="img1" ng-src="{{imageUrl}}" ng-style="imgStyle" style="position:absolute;"  on-drag="dragging($event)" ></img>
+      <img degrees='angle' rotate id="img1" ng-src="{{imageUrl}}" ng-style="imgStyle" style="position:absolute;"  on-drag="dragging($event)" ></img>
       <button class="button button-assertive" style="position:absolute;top:45%;left:45%;z-index:100" ng-click="crop(imageUrl)">Crop</button>
+
+      <button class="button button-assertive" style="position:absolute;left:1%;z-index:100;bottom:15px" ng-click="rotate('left')">Rotate Left</button>
+
+      <button class="button button-assertive" style="position:absolute;right:1%;z-index:100;bottom:15px" ng-click="rotate('right')">Rotate Right</button>
+
     </div>
     <div ng-show="ifActionSetImage">
       <button class="button button-assertive" style="position:absolute;top:45%;left:45%;z-index:100" ng-click="goToEdit()">Edit</button>
