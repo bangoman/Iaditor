@@ -314,11 +314,11 @@ angular.module('iaditor.controllers', [])
 		return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 	}  
 	$rootScope.marker = $scope.getParameterByName("marker");  
-	// console.log($rootScope.marker );
+	 console.log($rootScope.marker );
 
 	// Check if $root.scope.marker exist 
-	if ( !$rootScope.marker ) {
-		$http.get('http://test.sodyo.com/cms/ControlPanel/index.php/api/markerContent/3/?AppToken=c296b77eba4525f21ba3ff8776728ba4&AppPlugMarkerID=4330').then(function( resp) {
+	if ( $rootScope.marker ) {
+		$http.get('http://test.sodyo.com/cms/ControlPanel/index.php/api/markerContent/3/?AppToken=c296b77eba4525f21ba3ff8776728ba4&AppPlugMarkerID=' + $rootScope.marker ).then(function( resp) {
 			console.log('Success', resp.data.ActionSets[0].ActionSetImage );
 			// For JSON responses, resp.data contains the result
 			if ( resp.data.ActionSets[0].ActionSetImage ) {
