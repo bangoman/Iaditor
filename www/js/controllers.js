@@ -13,25 +13,16 @@ angular.module('iaditor.controllers', [])
 	$scope.iadObj = {};
 	$scope.rawData = {};
 
-	$http.get('structure.json').
-		success(function(data, status, headers, config) {
-			// this callback will be called asynchronously
-			$scope.iadObj =data;
-			$scope.iadObj =[{"AppPlugMarkerID":"1","AppPlugMarkerStatus":"1","MarkerName":"AAA feeder demo","ActionSets":[{"ActionSetStatus":"1","ActionSetType":"1","ActionSetName":"AAA feeder demo","ActionSetOrder":"0","ActionSetImage":"http://sodyo.com/cms/InteractiveAd/Sodyo/BackScreenWIcons009 copy.gif","ActionSetActions":[]}],}]
-			//$scope.iadObj =[{"appPlugMarkerIDs":["4375"],"AppPlugMarkerStatus":"1","MarkerName":"AAA feeder demo","ActionSets":[{"ActionSetStatus":"1","ActionSetType":"1","ActionSetName":"AAA feeder demo","ActionSetOrder":"0","ActionSetImage":"http://sodyo.com/cms/InteractiveAd/Sodyo/BackScreenWIcons009 copy.gif","ActionSetActions":[]}],}]
-			$scope.rawData = data;
+      $scope.iadObj =[{"AppPlugMarkerID":"1","AppPlugMarkerStatus":"1","MarkerName":"AAA feeder demo","ActionSets":[{"ActionSetStatus":"1","ActionSetType":"1","ActionSetName":"AAA feeder demo","ActionSetOrder":"0","ActionSetImage":"http://sodyo.com/cms/InteractiveAd/Sodyo/BackScreenWIcons009 copy.gif","ActionSetActions":[]}],}]
+      //$scope.iadObj =[{"appPlugMarkerIDs":["4375"],"AppPlugMarkerStatus":"1","MarkerName":"AAA feeder demo","ActionSets":[{"ActionSetStatus":"1","ActionSetType":"1","ActionSetName":"AAA feeder demo","ActionSetOrder":"0","ActionSetImage":"http://sodyo.com/cms/InteractiveAd/Sodyo/BackScreenWIcons009 copy.gif","ActionSetActions":[]}],}]
+//      $scope.rawData = data;
 
-			// console.log($scope.iadObj[0].MarkerName);        
-			$scope.iadObj[0].MarkerName = "test1";         
-			$scope.iadObj[0].AppPlugMarkerID = "1";  
-			$scope.iadObj[0].ActionSets[0].ActionSetActions = []        
-			// console.log($scope.iadObj);
-			// when the response is available
-		}).
-		error(function(data, status, headers, config) {
-		// called asynchronously if an error occurs
-		// or server returns response with an error status.
-		});  
+      // console.log($scope.iadObj[0].MarkerName);        
+      $scope.iadObj[0].MarkerName = "test1";         
+      $scope.iadObj[0].AppPlugMarkerID = "1";  
+      $scope.iadObj[0].ActionSets[0].ActionSetActions = []        
+      // console.log($scope.iadObj);
+      // when the response is available
 
 	$scope.createSquare = function( actions ){
 
@@ -71,6 +62,8 @@ angular.module('iaditor.controllers', [])
 			$rootScope.iadBackground = $scope.prevObj.ActionSets[0].ActionSetImage;
 			// console.log( $scope.prevObj[0].ActionSets[0].ActionSetActions );
 			$scope.createSquare( $scope.prevObj.ActionSets[0].ActionSetActions );
+      $scope.iadObj[0] = $scope.prevObj;
+      console.log($scope.iadObj);
 			// console.log( $scope.prevObj.ActionSets[0].ActionSetImage );
 		} else {
 
@@ -80,6 +73,7 @@ angular.module('iaditor.controllers', [])
 			// console.log( $scope.prevObj[0].ActionSets[0].ActionSetActions );
 			$scope.createSquare( $scope.prevObj[0].ActionSets[0].ActionSetActions );
 		}	
+
 	} else { 
 		
 		$scope.markerImage = "";
@@ -253,13 +247,14 @@ angular.module('iaditor.controllers', [])
 	// $scope.markerImage = "";
 	$scope.showMarker = false;
 	$scope.saveActionsSet = function(){
-
-		$scope.iadObj[0].ActionSets[0].ActionSetImage = $rootScope.iadBackground ;
-		$scope.iadObj[0].ActionSets[0].ActionSetName = "test1";
-		console.log(angular.toJson($scope.iadObj))
+    $scope.iadObj[0].ActionSets[0].ActionSetImage = $rootScope.iadBackground ;
+    $scope.iadObj[0].ActionSets[0].ActionSetName = "test1";    
 		$scope.appPlugMarkerID=[];
 		$scope.appPlugMarkerID[0] = $rootScope.marker;
 		console.log($scope.appPlugMarkerID[0]+"!!!!!");
+    
+    console.log($scope.iadObj);
+    console.log("!!!!!");
 
 		if($rootScope.marker){
 			$http.post('http://test.sodyo.com/cms/ControlPanel/index.php/api/updateMarkers/3/?AppToken=c296b77eba4525f21ba3ff8776728ba4&&user=ben@sodyo.com&pass=12345', {plugID:"1",appPlugMarkerIDs:angular.toJson($scope.appPlugMarkerID),content:angular.toJson($scope.iadObj)}).
@@ -278,6 +273,7 @@ angular.module('iaditor.controllers', [])
 			});        
 		}
 		else {
+      console.log(angular.toJson($scope.iadObj))      
 			$http.post('http://test.sodyo.com/cms/ControlPanel/index.php/api/allocateMarkers/3/?AppToken=c296b77eba4525f21ba3ff8776728ba4&&user=ben@sodyo.com&pass=12345', {plugID:"1",content:angular.toJson($scope.iadObj)}).
 			success(function(data, status, headers, config) {
 				console.log(data);
