@@ -336,6 +336,7 @@ angular.module('iaditor.controllers', [])
 	};
 
 	$scope.checkImageUrl = function(imgUrl){    
+
 		if(imgUrl){
 			cropApi.saveImage(imgUrl)
 			.success(function (e) {
@@ -370,6 +371,7 @@ angular.module('iaditor.controllers', [])
 	}
 	$scope.checkImageUrl($scope.imageUrl);
 	$scope.imgStyle ={"height":"100%","left":"0px","top":"0px"};
+	// alert($scope.imgStyle);
 	$scope.img1 =angular.element( document.querySelector( '#img1' ) )
 	$ionicGesture.on('dragstart', function(event){$scope.getStartPosition(event)}, $scope.img1);
 
@@ -429,11 +431,23 @@ angular.module('iaditor.controllers', [])
 	$scope.angle = $scope.rotAngle;
     $scope.rotate = function ( direction ) {
 
-    	if ( direction == 'left') {
+    	var height = document.getElementById('img1').offsetHeight;
+		var width = document.getElementById('img1').offsetWidth;
+		// var topStr = $scope.imgStyle.top;
+		correction = width - height;
+		if ( correction > 0) {
 
-    		 $scope.angle = $scope.angle - 90 ;
+			correction = '-'+correction+'px';
+		} else{
+			correction = '0px';
+		}
+
+    	if ( direction == 'left') {
+    		$scope.angle = $scope.angle - 90 ;
+    		$scope.imgRotationCss = '  height: 100%;left:'+correction+';';
     	}else {
-    		 $scope.angle = $scope.angle + 90 ;
+    		$scope.angle = $scope.angle + 90 ;
+    		$scope.imgRotationCss = '  height: 100%;left:'+correction+';';
     	};
 
        

@@ -13,7 +13,7 @@ angular.module('iaditor.services', [])
             return $http.post(urlBase+'?imgUrl=' + imgUrl +"&y=" + y + "&x="+ x + "&height="+ height +"&width=" + width + "&action=crop");
         };
         this.saveImage = function(imgUrl){
-          console.log(imgUrl);
+          	console.log(imgUrl);
             return $http.post(urlBase+'?imgUrl=' + imgUrl  + "&action=save");
         };
 
