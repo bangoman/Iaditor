@@ -13,16 +13,16 @@ angular.module('iaditor.controllers', [])
 	$scope.iadObj = {};
 	$scope.rawData = {};
 
-      $scope.iadObj =[{"AppPlugMarkerID":"1","AppPlugMarkerStatus":"1","MarkerName":"AAA feeder demo","ActionSets":[{"ActionSetStatus":"1","ActionSetType":"1","ActionSetName":"AAA feeder demo","ActionSetOrder":"0","ActionSetImage":"http://sodyo.com/cms/InteractiveAd/Sodyo/BackScreenWIcons009 copy.gif","ActionSetActions":[]}],}]
-      //$scope.iadObj =[{"appPlugMarkerIDs":["4375"],"AppPlugMarkerStatus":"1","MarkerName":"AAA feeder demo","ActionSets":[{"ActionSetStatus":"1","ActionSetType":"1","ActionSetName":"AAA feeder demo","ActionSetOrder":"0","ActionSetImage":"http://sodyo.com/cms/InteractiveAd/Sodyo/BackScreenWIcons009 copy.gif","ActionSetActions":[]}],}]
-//      $scope.rawData = data;
+	$scope.iadObj =[{"AppPlugMarkerID":"1","AppPlugMarkerStatus":"1","MarkerName":"AAA feeder demo","ActionSets":[{"ActionSetStatus":"1","ActionSetType":"1","ActionSetName":"AAA feeder demo","ActionSetOrder":"0","ActionSetImage":"http://sodyo.com/cms/InteractiveAd/Sodyo/BackScreenWIcons009 copy.gif","ActionSetActions":[]}],}]
+	//$scope.iadObj =[{"appPlugMarkerIDs":["4375"],"AppPlugMarkerStatus":"1","MarkerName":"AAA feeder demo","ActionSets":[{"ActionSetStatus":"1","ActionSetType":"1","ActionSetName":"AAA feeder demo","ActionSetOrder":"0","ActionSetImage":"http://sodyo.com/cms/InteractiveAd/Sodyo/BackScreenWIcons009 copy.gif","ActionSetActions":[]}],}]
+	//$scope.rawData = data;
 
-      // console.log($scope.iadObj[0].MarkerName);        
-      $scope.iadObj[0].MarkerName = "test1";         
-      $scope.iadObj[0].AppPlugMarkerID = "1";  
-      $scope.iadObj[0].ActionSets[0].ActionSetActions = []        
-      // console.log($scope.iadObj);
-      // when the response is available
+	// console.log($scope.iadObj[0].MarkerName);        
+	$scope.iadObj[0].MarkerName = "test1";         
+	$scope.iadObj[0].AppPlugMarkerID = "1";  
+	$scope.iadObj[0].ActionSets[0].ActionSetActions = []        
+	// console.log($scope.iadObj);
+	// when the response is available
 
 	$scope.createSquare = function( actions ){
 
@@ -273,39 +273,46 @@ angular.module('iaditor.controllers', [])
 			});        
 		}
 		else {
-      console.log(angular.toJson($scope.iadObj))      
+
 			$http.post('http://test.sodyo.com/cms/ControlPanel/index.php/api/allocateMarkers/3/?AppToken=c296b77eba4525f21ba3ff8776728ba4&&user=ben@sodyo.com&pass=12345', {plugID:"1",content:angular.toJson($scope.iadObj)}).
 			success(function(data, status, headers, config) {
 				console.log(data);
 				$scope.markerImage = data[0].markerImageLink;
 				$scope.showMarker = true;
-				// this callback will be called asynchronously
-				// when the response is available
 			}).
 			error(function(data, status, headers, config) {
-				console.log(data);
-
-				// called asynchronously if an error occurs
-				// or server returns response with an error status.
+				// console.log(data);
 			});
 		}
 	}
-
-	
 })
 
 /* 
  * @ChatsCtrl
  *
  */
-.controller('ChatsCtrl', function($scope,$ionicGesture,$ionicPosition,cropApi,$rootScope,$location,$http,$state) {
+.controller('ChatsCtrl', function($scope,$ionicGesture,$ionicPosition,cropApi,$rootScope,$location,$http,$state, $ionicGesture, $interval) {
 
 	$scope.imageUrl = null;
-	//$scope.imageUrl = "https://fbcdn-sphotos-a-a.akamaihd.net/hphotos-ak-xfp1/t31.0-8/p640x640/10443228_744241129023907_7646658678965780801_o.jpg";
 	$scope.chooseImage=true;
+	var element = angular.element(document.querySelector('#img1'));
 
+	// Zoom In 
+	$ionicGesture.on('pinchin', function (event) {
+		$scope.$apply(function () {
+			$scope.zoom(-1);
+		});
+	}, element);
+
+	// Zoom Out
+	$ionicGesture.on('pinchout', function (event) {
+		$scope.$apply(function () {
+			$scope.zoom( 1 );
+		});
+	}, element);
+
+	// Get parameter By name
 	$scope.getParameterByName = function(name) {
-
 		name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
 		var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
 		results = regex.exec(location.hash);
@@ -317,12 +324,10 @@ angular.module('iaditor.controllers', [])
 	// Check if $root.scope.marker exist 
 	if ( $rootScope.marker ) {
 		$http.get('http://test.sodyo.com/cms/ControlPanel/index.php/api/markerContent/3/?AppToken=c296b77eba4525f21ba3ff8776728ba4&AppPlugMarkerID=' + $rootScope.marker ).then(function( resp) {
-			console.log('Success', resp.data );
+
 			// For JSON responses, resp.data contains the result
 			if ( resp.data.ActionSets[0].ActionSetImage ) {
-				// alert('working');
-				$scope.ifActionSetImage = 1 ;
-				// $rootScope.test = 'this is a test123';
+				$scope.ifActionSetImage = true ;
 				$rootScope.previewObj = resp.data;
 			};
 		}, function(err) {
@@ -330,11 +335,9 @@ angular.module('iaditor.controllers', [])
 			// err.status will contain the status code
 		})
  
-	} else {
-
-		// alert('marker not exist');
 	};
 
+	// Check Image URL
 	$scope.checkImageUrl = function(imgUrl){    
 
 		if(imgUrl){
@@ -350,6 +353,7 @@ angular.module('iaditor.controllers', [])
 		}
 	}
 
+	// Image Upload method
 	$scope.uploadImage = function(){
 		var e =  angular.element( document.querySelector( '#fileToUpload' ) );    
 		$http.post('http://localhost/sodyo_editor/www/upload.php', {fileToUpload:e[0].value}).
@@ -375,6 +379,7 @@ angular.module('iaditor.controllers', [])
 	$scope.img1 =angular.element( document.querySelector( '#img1' ) )
 	$ionicGesture.on('dragstart', function(event){$scope.getStartPosition(event)}, $scope.img1);
 
+	// Drag Image
 	$scope.dragging = function(e){
 		var height = document.getElementById('img1').offsetHeight;
 		var width = document.getElementById('img1').offsetWidth;
@@ -393,6 +398,8 @@ angular.module('iaditor.controllers', [])
 		} 
 		// console.log($ionicPosition.pos ition(e));
 	}
+
+	// Image zoom ( zoom in and zoom out )
 	$scope.zoom = function(inOut){
 		var heightStr = $scope.imgStyle.height;
 		var height =  parseInt(heightStr.replace("%", ""), 10);
@@ -402,6 +409,7 @@ angular.module('iaditor.controllers', [])
 		}    
 	};
 
+	// Crop image
 	$scope.crop = function (imgUrl) {
 	 //Fake customer data
 	  
@@ -409,18 +417,15 @@ angular.module('iaditor.controllers', [])
 		.success(function (e) {
 			console.log(e);
 			$rootScope.iadBackground = e;
-			//$location.path('/#/tab/dash')
 			$state.go('tab.dash')
-			//$scope.status = 'Inserted Customer! Refreshing customer list.';
-			//$scope.customers.push(cust);
 		}).
 			error(function(error) {
 			console.log(error);
 			  //$scope.status = 'Unable to insert customer: ' + error.message;
 		});
 	};  
-	//$scope.crop($scope.imageUrl);
 
+	// Go to Edit page
 	$scope.goToEdit = function () {
 	 	//Fake customer data
 	 	$state.go('tab.dash');
@@ -433,7 +438,6 @@ angular.module('iaditor.controllers', [])
 
     	var height = document.getElementById('img1').offsetHeight;
 		var width = document.getElementById('img1').offsetWidth;
-		// var topStr = $scope.imgStyle.top;
 		correction = width - height;
 		if ( correction > 0) {
 
@@ -444,10 +448,10 @@ angular.module('iaditor.controllers', [])
 
     	if ( direction == 'left') {
     		$scope.angle = $scope.angle - 90 ;
-    		$scope.imgRotationCss = '  height: 100%;left:'+correction+';';
+    		$scope.imgRotationCss = '  height: 610px;left:'+correction+';';
     	}else {
     		$scope.angle = $scope.angle + 90 ;
-    		$scope.imgRotationCss = '  height: 100%;left:'+correction+';';
+    		$scope.imgRotationCss = '  height: 610px;left:'+correction+';';
     	};
 
        
