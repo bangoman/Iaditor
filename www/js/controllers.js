@@ -495,6 +495,7 @@ angular.module('iaditor.controllers', [])
   };
 }])
 
+
 /* 
  * @ChatDetailCtrl
  *
