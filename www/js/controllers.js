@@ -413,7 +413,7 @@ angular.module('iaditor.controllers', [])
 	$scope.crop = function (imgUrl) {
 	 //Fake customer data
 	  
-		cropApi.crop(imgUrl,$scope.img1[0].offsetLeft,$scope.img1[0].offsetTop,$scope.img1[0].offsetHeight,$scope.img1[0].offsetWidth)
+		cropApi.crop(imgUrl,$scope.img1[0].offsetLeft,$scope.img1[0].offsetTop,$scope.img1[0].offsetHeight,$scope.img1[0].offsetWidth,$scope.angle)
 		.success(function (e) {
 			console.log(e);
 			$rootScope.iadBackground = e;
@@ -432,30 +432,28 @@ angular.module('iaditor.controllers', [])
 	}; 
 
 	// Rotate Image
-	$scope.rotAngle = 0;
-	$scope.angle = $scope.rotAngle;
-    $scope.rotate = function ( direction ) {
-
-    	var height = document.getElementById('img1').offsetHeight;
+	$scope.angle = 0;  
+  $scope.rotate = function ( direction ) {
+  	var height = document.getElementById('img1').offsetHeight;
 		var width = document.getElementById('img1').offsetWidth;
 		correction = width - height;
-		if ( correction > 0) {
 
+		if ( correction > 0) {
 			correction = '-'+correction+'px';
 		} else{
 			correction = '0px';
 		}
 
-    	if ( direction == 'left') {
-    		$scope.angle = $scope.angle - 90 ;
-    		$scope.imgRotationCss = '  height: 610px;left:'+correction+';';
-    	}else {
-    		$scope.angle = $scope.angle + 90 ;
-    		$scope.imgRotationCss = '  height: 610px;left:'+correction+';';
-    	};
-
-       
-    };
+  	if ( direction == 'left') {
+  		$scope.angle = $scope.angle - 90 ;
+  		$scope.imgRotationCss = '  height: 610px;left:'+correction+';';
+  	}else {
+  		$scope.angle = $scope.angle + 90 ;
+  		$scope.imgRotationCss = '  height: 610px;left:'+correction+';';
+  	};
+    console.log($scope.angle);
+     
+  };
 })
 
 /* 
