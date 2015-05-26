@@ -29,7 +29,7 @@ function save_image(){
 
     $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     
-    $url = "http://$_SERVER[HTTP_HOST]/Iaditor/www/" . $img_name;
+    $url = "http://$_SERVER[HTTP_HOST]/iaditor/www/" . $img_name;
 
     $image = new ImageResize($imgUrl);
 
@@ -48,6 +48,7 @@ function crop(){
     $y = $_GET["y"];
     $x = $_GET["x"];
     $height = $_GET["height"];
+    $angle = $_GET["angle"];
     $image = new ImageResize($imgUrl);
     $image->resizeToHeight($height);
     $image->save("img/" . basename($imgUrl));    
@@ -57,7 +58,8 @@ function crop(){
     }else if (exif_imagetype($imgUrl) == 3){
         $src = imagecreatefrompng($imgUrl);  
     }
-    
+    $rotatedImage = imagerotate($src,$angle * -1,0);
+    $src = $rotatedImage;
     $dest = imagecreatetruecolor(320, 568);
     //imagecopy($dest, $src, 0, 0, abs($y), abs($x),320, 568);
     imagecopy($dest, $src, 0, 0, abs($y), abs($x),320, 568);
@@ -65,10 +67,12 @@ function crop(){
     // Output and free from memory
     //header('Content-Type: image/gif');
     //imagegif($dest);
-    $img_name="img/cropped_". basename($imgUrl);
+    $img_name="img/cropped1_". basename($imgUrl);
     //$img_name="img/". $rand . ".jpg";
-    $url = "http://$_SERVER[HTTP_HOST]/Iaditor/www/" . $img_name;
+    $url = "http://$_SERVER[HTTP_HOST]/iaditor/www/" . $img_name;
+
     imagejpeg ( $dest , $img_name , 100  );
+    
     imagedestroy($dest);
     imagedestroy($src);
     echo $url;    
