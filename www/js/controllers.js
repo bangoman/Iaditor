@@ -5,7 +5,7 @@ angular.module('iaditor.controllers', [])
  *
  */
 // .controller('DashCtrl', function($scope,$compile,$ionicGesture,$ionicPopup,$timeout,$rootScope,$http) {
-.controller('DashCtrl', ['$scope', '$rootScope', '$compile', '$ionicGesture', '$ionicPopup', '$timeout', '$http', function($scope,$compile,$ionicGesture,$ionicPopup,$timeout,$rootScope,$http) {
+.controller('DashCtrl', ['$scope', '$rootScope', '$compile', '$ionicGesture', '$ionicPopup', '$timeout', '$http', function($scope,$rootScope,$compile,$ionicGesture,$ionicPopup,$timeout,$http) {
   $scope.squares = [];
   $scope.squaresCount = 0;
   $scope.squareStyle = [];
@@ -299,22 +299,17 @@ angular.module('iaditor.controllers', [])
 
   // $rootScope.screenWidth = '321px';
   // widthRatio = widthDiff/320
+     $scope.calculateAspectRatioFit = function(srcWidth, srcHeight, maxWidth, maxHeight) {
+        var ratio = [maxWidth / srcWidth, maxHeight / srcHeight ];
+        ratio = Math.min(ratio[0], ratio[1]);
 
-  if ( deviceWidth >= deviceHeight ) {
-    
-    heightDiff  = deviceHeight - 568;
-    heightRatio   = heightDiff / 568;
-    
-    $rootScope.screenHeight  =  deviceHeight+"px";
-    $rootScope.screenWidth   =  320 + ( heightRatio * 320 )+"px";
-  } else {
+        return { width:srcWidth*ratio, height:srcHeight*ratio };
+     };
+     var dimensions = $scope.calculateAspectRatioFit(320,568,deviceWidth,deviceHeight);
 
-    widthDiff   = deviceWidth - 320;
-    widthRatio   = widthDiff / 320;    
-    
-    $rootScope.screenWidth  =  deviceWidth+"px";
-    $rootScope.screenHeight   =  568 + ( widthRatio * 568 )+"px";
-  };
+    $rootScope.screenWidth  =  dimensions.width + "px";
+    $rootScope.screenHeight   = dimensions.height + "px";
+
 
   console.log( $rootScope.screenWidth+'::'+$rootScope.screenHeight); 
 
@@ -415,19 +410,25 @@ angular.module('iaditor.controllers', [])
     var top =  parseInt(topStr.replace("px", ""), 10);
     var leftStr = $scope.imgStyle.left;
     var left =  parseInt(leftStr.replace("px", ""), 10);
-    var right = left - window.innerWidth + width ; 
+    var right = left + width ; 
+    var containerHeight = parseInt($rootScope.screenHeight.replace("px", ""), 10 );
+    var containerWidth = parseInt($rootScope.screenWidth.replace("px", ""), 10 );
 
-    var limitRight = (parseInt($rootScope.screenWidth.replace("px", ""), 10 ) + $rootScope.offsetLeft) *-1 ;
-    if(top + (e.gesture.center.pageY -$scope.imgY) <= 0 && height + (top + (e.gesture.center.pageY -$scope.imgY)) > 568 ){
+    var limitRight =  containerWidth ;
+
+    if(top + (e.gesture.center.pageY -$scope.imgY) <= 0 && height + (top + (e.gesture.center.pageY -$scope.imgY)) > containerHeight ){
       $scope.imgStyle.top = e.gesture.deltaY+"px";
       $scope.imgStyle.top = e.gesture.center.pageY -$scope.imgY + "px";
     }
     // + (e.gesture.center.pageX -$scope.imgX)
-    console.log( ('test val:',e.gesture.center.pageX -$scope.imgX) );
-    if( (left - $rootScope.offsetLeft) + (e.gesture.center.pageX -$scope.imgX) <= 0 &&  right   > limitRight  ){
+    //console.log((right)  + "=" + limitRight);
+    var l = (e.gesture.center.pageX -$scope.imgX);
+    var r = l + width;
+    console.log(r);
+    if( (left - $rootScope.offsetLeft) + (e.gesture.center.pageX -$scope.imgX) <= 0 &&  r  > limitRight  ){
 
       // console.log('enter',width + ( (left + $rootScope.offsetLeft) + (e.gesture.center.pageX -$scope.imgX)) );
-      $scope.imgStyle.left = e.gesture.center.pageX -$scope.imgX+ "px";  
+      $scope.imgStyle.left = e.gesture.center.pageX - $scope.imgX+ "px";  
     }
     if($scope.imgStyle.left > "0px" ){
         $scope.imgStyle.left = "0px"
