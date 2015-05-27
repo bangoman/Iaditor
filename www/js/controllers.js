@@ -361,6 +361,7 @@ angular.module('iaditor.controllers', [])
   $scope.checkImageUrl = function(imgUrl){    
 
     if(imgUrl){
+
       cropApi.saveImage(imgUrl)
       .success(function (e) {
         $scope.imageUrl = e;
@@ -403,7 +404,6 @@ angular.module('iaditor.controllers', [])
   // Drag Uploaded Image
   $scope.dragging = function(e){
 
-    // console.log(e.gesture);
     var height = document.getElementById('img1').offsetHeight;
     var width = document.getElementById('img1').offsetWidth;
     var topStr = $scope.imgStyle.top;
@@ -438,24 +438,28 @@ angular.module('iaditor.controllers', [])
   }
 
   // Image zoom ( zoom in and zoom out )
-  var scale = 1;
   $scope.zoom = function(inOut){
-    
+
+    var screenHeight = parseInt($rootScope.screenHeight.replace("px", ""));
+    var offsetHeight = document.getElementById('img1').offsetHeight;
+
     var heightStr = $scope.imgStyle.height;
     var height =  parseInt(heightStr.replace("%", ""), 10);
 
-    if ( inOut == 1 ) {
-      scale += .2;
-    } else if (inOut == -1 && scale > 1 ){
-      scale -= .2;
-    } else{
-      scale = 1;
-    };    
-    console.log( $scope.imgStyle );
-    $scope.imgRotationCss = '-webkit-transform:rotate('+$scope.angle+'deg) scale('+scale+')';
-    // console.log(scale);
-  };
+    var leftStr = $scope.imgStyle.left;
+    var left =  parseInt(leftStr.replace("px", ""), 10);
 
+    var topStr = $scope.imgStyle.top;
+    var top =  parseInt(topStr.replace("px", ""));
+
+    console.log(offsetHeight+"::"+screenHeight);
+
+    if(height+inOut >= 100){
+      $scope.imgStyle.height = (height+inOut) + "%"; 
+      $scope.imgStyle.left = left+ (( (inOut * screenHeight)/100 )*-1)/2 + "px";
+      $scope.imgStyle.top = top+( ( (inOut * screenHeight)/100 ) * -1 )/2 + "px"; 
+    }
+  };
 
   // Crop image
   $scope.crop = function (imgUrl) {
