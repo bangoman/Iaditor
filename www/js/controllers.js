@@ -438,14 +438,24 @@ angular.module('iaditor.controllers', [])
   }
 
   // Image zoom ( zoom in and zoom out )
+  var scale = 1;
   $scope.zoom = function(inOut){
+    
     var heightStr = $scope.imgStyle.height;
     var height =  parseInt(heightStr.replace("%", ""), 10);
 
-    if(height+inOut >= 100){
-      $scope.imgStyle.height = (height+inOut) + "%";    
-    }    
+    if ( inOut == 1 ) {
+      scale += .2;
+    } else if (inOut == -1 && scale > 1 ){
+      scale -= .2;
+    } else{
+      scale = 1;
+    };    
+    console.log( $scope.imgStyle );
+    $scope.imgRotationCss = '-webkit-transform:rotate('+$scope.angle+'deg) scale('+scale+')';
+    // console.log(scale);
   };
+
 
   // Crop image
   $scope.crop = function (imgUrl) {
