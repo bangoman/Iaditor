@@ -46,7 +46,7 @@ angular.module('iaditor.controllers', [])
       } 
 
     var c = $scope.squaresCount;
-    var square =  angular.element($compile('<div id="'+ c +'" ng-click="selectSquare" ng-style="squareStyle['+ $scope.squaresCount +']" on-drag="dragging($event,'+$scope.squaresCount+')"  style="width:'+action.ActionButtonWidth+'px;height:'+action.ActionButtonHeight+'px;background-color:'+action.bg+'; opacity: 0.6;position:absolute;top:'+ action.ActionButtonPosY +'px;left:'+action.ActionButtonPosX +'px;font-size:25px;color:#ffffff"><div style="position:relative;top:100%;left:100%;background-color:#000000;width:20px;height:20px;" on-drag="resize($event);"on-release="release()"></div>' + action.type +'</div>')($scope) )
+    var square =  angular.element($compile('<div id="'+ c +'" ng-click="selectSquare" ng-style="squareStyle['+ $scope.squaresCount +']" on-drag="dragging($event,'+$scope.squaresCount+')"  style="width:'+action.ActionButtonWidth * $rootScope.ratio+'px;height:'+action.ActionButtonHeight * $rootScope.ratio+'px;background-color:'+action.bg+'; opacity: 0.6;position:absolute;top:'+ action.ActionButtonPosY * $rootScope.ratio+'px;left:'+action.ActionButtonPosX * $rootScope.ratio +'px;font-size:25px;color:#ffffff"><div style="position:relative;top:100%;left:100%;background-color:#000000;width:20px;height:20px;" on-drag="resize($event);"on-release="release()"></div>' + action.type +'</div>')($scope) )
     element.append( square);
     $scope.squaresCount += 1;
 
@@ -72,6 +72,7 @@ angular.module('iaditor.controllers', [])
       $rootScope.iadBackground = $scope.prevObj[0].ActionSets[0].ActionSetImage;
       // console.log( $scope.prevObj[0].ActionSets[0].ActionSetActions );
       $scope.createSquare( $scope.prevObj[0].ActionSets[0].ActionSetActions );
+      $scope.iadObj = $scope.prevObj;
     } 
 
   } else { 
@@ -113,7 +114,7 @@ angular.module('iaditor.controllers', [])
         text: '<b>Save</b>',
         type: 'button-positive',
         onTap: function(e) {
-          console.log($scope.data.selectedAction + "!");
+          //console.log($scope.data.selectedAction + "!");
           if ($scope.data.phone.length > 0) {
             var res = {"obj":{"phone":$scope.data.phone},"type":"phone","value":$scope.data.phone,"bg":"blue","actionId":"1"}
             return res;
@@ -158,12 +159,17 @@ angular.module('iaditor.controllers', [])
     $scope.squareStyle.push({});
     $scope.squares.push(action);
     var paramValue = action.obj; 
-    var ActionSetsAction = {"ActionID":"1",
-    "ActionStatus": action.actionId,
+    deviceWidth = window.innerWidth;
+    deviceHeight = window.innerHeight;
+    console.log();
+    var squareFirstPosition = {"x":($rootScope.screenWidthNum/2)-50,"y":($rootScope.screenHeightNum/2)-50}
+    console.log(squareFirstPosition);
+    var ActionSetsAction = {"ActionID":action.actionId,
+    "ActionStatus": "1",
     "ActionOrder":"0",
     "ActionName":action.type,
-    "ActionButtonPosX":Math.round((e.gesture.center.pageX-50)).toString(),
-    "ActionButtonPosY":Math.round((e.gesture.center.pageY-50)).toString(),
+    "ActionButtonPosX":squareFirstPosition.x,
+    "ActionButtonPosY":squareFirstPosition.y,
     "ActionButtonWidth":"100",
     "ActionButtonHeight":"100",
     "ActionButtonImageURL":"",
@@ -185,7 +191,8 @@ angular.module('iaditor.controllers', [])
     $scope.iadObj[0].ActionSets[0].ActionSetActions.push(ActionSetsAction);           
     var c = $scope.squaresCount;
     // alert(c);
-    var square =  angular.element($compile('<div id="'+ c +'" ng-click="selectSquare" ng-style="squareStyle['+ $scope.squaresCount +']" on-drag="dragging($event,'+$scope.squaresCount+')"  style="width:100px;height:100px;background-color:'+action.bg+'; opacity: 0.6;position:absolute;top:'+ (e.gesture.center.pageY-50) +'px;left:'+(e.gesture.center.pageX -50) +'px;font-size:25px;color:#ffffff"><div style="position:relative;top:100%;left:100%;background-color:#000000;width:20px;height:20px;" on-drag="resize($event);"on-release="release()"></div>' + action.type +'</div>')($scope) )
+    var square =  angular.element($compile('<div id="'+ c +'" ng-click="selectSquare" ng-style="squareStyle['+ $scope.squaresCount +']" on-drag="dragging($event,'+$scope.squaresCount+')"  style="width:100px;height:100px;background-color:'+action.bg+'; opacity: 0.6;position:absolute;top:'+ squareFirstPosition.y +'px;left:'+ squareFirstPosition.x +'px;font-size:25px;color:#ffffff"><div style="position:relative;top:100%;left:100%;background-color:#000000;width:20px;height:20px;" on-drag="resize($event);"on-release="release()"></div>' + action.type +'</div>')($scope) )
+    console.log(square);
     element.append( square);
     $scope.squaresCount+=1;
     //$ionicGesture.on('pinchout', function(event){$scope.resize(c,1,event)}, square);        
@@ -203,6 +210,7 @@ angular.module('iaditor.controllers', [])
   $scope.lastDeltaY = 0;
   $scope.resize = function(e){
     $scope.resizing = true;
+    console.log($scope.iadObj);
     //alert(JSON.stringify(e.gesture))        
     var deltaX = e.gesture.deltaX;
     var deltaY = e.gesture.deltaY;        
@@ -216,8 +224,8 @@ angular.module('iaditor.controllers', [])
     $scope.lastDeltaY = deltaY;
     $scope.lastDeltaX = deltaX;
     var key = parseInt(e.srcElement.parentElement.id);
-    $scope.iadObj[0].ActionSets[0].ActionSetActions[key].ActionButtonWidth =((deltaX + width)-$scope.lastDeltaX ).toString();
-    $scope.iadObj[0].ActionSets[0].ActionSetActions[key].ActionButtonHeight =((deltaY + height)-$scope.lastDeltaY ).toString();        
+    $scope.iadObj[0].ActionSets[0].ActionSetActions[key].ActionButtonWidth =((deltaX + width)-$scope.lastDeltaX )/$rootScope.ratio.toString();
+    $scope.iadObj[0].ActionSets[0].ActionSetActions[key].ActionButtonHeight =((deltaY + height)-$scope.lastDeltaY )/$rootScope.ratio.toString();        
   }
 
   // Drag square box on the top of the image
@@ -229,7 +237,7 @@ angular.module('iaditor.controllers', [])
       var widthStr = e.srcElement.style.width
       var width =  parseInt(widthStr.replace("px", ""), 10);
       var top = ((e.gesture.center.pageY) - (height/2));
-      var left = ((e.gesture.center.pageX) - (width/2));
+      var left = ((e.gesture.center.pageX) - (width/2)) - $rootScope.offsetLeft;
       $scope.squareStyle[count] = {      
 
         //"transform": "translate(" + e.gesture.center.pageX + "px, " + e.gesture.center.pageY + "px)",
@@ -238,8 +246,8 @@ angular.module('iaditor.controllers', [])
         "left":left + "px"
       };
       var key = parseInt(e.srcElement.id);
-      $scope.iadObj[0].ActionSets[0].ActionSetActions[key].ActionButtonPosX =  Math.round(left).toString();
-      $scope.iadObj[0].ActionSets[0].ActionSetActions[key].ActionButtonPosY =  Math.round(top).toString();        
+      $scope.iadObj[0].ActionSets[0].ActionSetActions[key].ActionButtonPosX =  Math.round(left /$rootScope.ratio).toString();
+      $scope.iadObj[0].ActionSets[0].ActionSetActions[key].ActionButtonPosY =  Math.round(top /$rootScope.ratio).toString();        
 
     }
   }
@@ -254,7 +262,7 @@ angular.module('iaditor.controllers', [])
     console.log($scope.appPlugMarkerID[0]+"!!!!!");
     
     console.log($scope.iadObj);
-    console.log("!!!!!");
+    console.log(angular.toJson($scope.iadObj));
 
     if($rootScope.marker){
       $http.post('http://test.sodyo.com/cms/ControlPanel/index.php/api/updateMarkers/3/?AppToken=c296b77eba4525f21ba3ff8776728ba4&&user=ben@sodyo.com&pass=12345', {plugID:"1",appPlugMarkerIDs:angular.toJson($scope.appPlugMarkerID),content:angular.toJson($scope.iadObj)}).
@@ -295,20 +303,17 @@ angular.module('iaditor.controllers', [])
 
   deviceWidth = window.innerWidth;
   deviceHeight = window.innerHeight;
-  // alert(deviceHeight +'::'+deviceWidth);
+  $scope.calculateAspectRatioFit = function(srcWidth, srcHeight, maxWidth, maxHeight) {
+    var ratio = [maxWidth / srcWidth, maxHeight / srcHeight ];
+    ratio = Math.min(ratio[0], ratio[1]);
 
-  // $rootScope.screenWidth = '321px';
-  // widthRatio = widthDiff/320
-     $scope.calculateAspectRatioFit = function(srcWidth, srcHeight, maxWidth, maxHeight) {
-        var ratio = [maxWidth / srcWidth, maxHeight / srcHeight ];
-        ratio = Math.min(ratio[0], ratio[1]);
-
-        return { width:srcWidth*ratio, height:srcHeight*ratio };
-     };
-     var dimensions = $scope.calculateAspectRatioFit(320,568,deviceWidth,deviceHeight);
-
-    $rootScope.screenWidth  =  dimensions.width + "px";
-    $rootScope.screenHeight   = dimensions.height + "px";
+    return { width:srcWidth*ratio, height:srcHeight*ratio ,ratio:ratio};
+  };
+  var dimensions = $scope.calculateAspectRatioFit(320,568,deviceWidth,deviceHeight);
+  $rootScope.ratio = dimensions.ratio;
+  console.log(dimensions);
+  $rootScope.screenWidth  =  dimensions.width + "px";
+  $rootScope.screenHeight   = dimensions.height + "px";
 
 
   console.log( $rootScope.screenWidth+'::'+$rootScope.screenHeight); 
@@ -355,7 +360,7 @@ angular.module('iaditor.controllers', [])
       console.error('ERR', err);
       // err.status will contain the status code
     })
-   };
+  };
 
   // Check Image URL
   $scope.checkImageUrl = function(imgUrl){    
@@ -379,6 +384,7 @@ angular.module('iaditor.controllers', [])
     $http.post('http://localhost/sodyo_editor/www/upload.php', {fileToUpload:e[0].value}).
     success(function(data, status, headers, config) {
       console.log(data);
+
       // this callback will be called asynchronously
       // when the response is available
     }).
@@ -459,9 +465,9 @@ angular.module('iaditor.controllers', [])
 
   // Crop image
   $scope.crop = function (imgUrl) {
-   //Fake customer data
-    
-    cropApi.crop(imgUrl,$scope.img1[0].offsetLeft,$scope.img1[0].offsetTop,$scope.img1[0].offsetHeight,$scope.img1[0].offsetWidth)
+    var position = {left:$scope.img1[0].offsetLeft / $rootScope.ratio,top:$scope.img1[0].offsetTop/$rootScope.ratio};    
+    var size = {height:$scope.img1[0].offsetHeight/$rootScope.ratio,width:$scope.img1[0].offsetWidth/$rootScope.ratio};
+    cropApi.crop(imgUrl,position.left,position.top,size.height,size.width,$scope.angle)
     .success(function (e) {
       console.log(e);
       $rootScope.iadBackground = e;
@@ -482,28 +488,27 @@ angular.module('iaditor.controllers', [])
   // Rotate Image
   $scope.rotAngle = 0;
   $scope.angle = $scope.rotAngle;
-
+  $scope.randDate = new Date().getTime();      
   $scope.rotate = function ( direction ) {
 
-    var height = document.getElementById('img1').offsetHeight;
-    var width = document.getElementById('img1').offsetWidth;
-    correction = width - height;
-
-    if ( correction > 0) {
-
-      correction = '-'+correction+'px';
-    } else{
-      correction = '0px';
-    }
-
     if ( direction == 'left') {
-      $scope.angle = $scope.angle - 90 ;
-      $scope.imgRotationCss = '  height: 610px;left:'+correction+';';
+      $scope.angle =  -90 ;
     }else {
-      $scope.angle = $scope.angle + 90 ;
-      $scope.imgRotationCss = '  height: 610px;left:'+correction+';';
-    };     
+      $scope.angle =  90 ;
+    };       
+    cropApi.rotate($scope.imageUrl,$scope.angle)
+    .success(function (e) {
+      $scope.randDate = new Date().getTime();      
+      console.log(e);
+    }).
+      error(function(error) {
+      console.log(error);
+        //$scope.status = 'Unable to insert customer: ' + error.message;
+    }); 
+
   };
+
+
 }])
 
 
@@ -532,6 +537,24 @@ angular.module('iaditor.controllers', [])
 // .controller('TabsCtrl', function($scope,$rootScope) {
  .controller('TabsCtrl', ['$scope', '$rootScope',function($scope, $rootScope) {
 
+  deviceWidth = window.innerWidth;
+  deviceHeight = window.innerHeight;
+
+  $scope.calculateAspectRatioFit = function(srcWidth, srcHeight, maxWidth, maxHeight) {
+    var ratio = [maxWidth / srcWidth, maxHeight / srcHeight ];
+    ratio = Math.min(ratio[0], ratio[1]);
+
+    return { width:srcWidth*ratio, height:srcHeight*ratio ,ratio:ratio};
+  };
+
+  var dimensions = $scope.calculateAspectRatioFit(320,568,deviceWidth,deviceHeight);
+
+  $rootScope.ratio = dimensions.ratio;
+  console.log(dimensions);
+  $rootScope.screenWidth  =  dimensions.width + "px";
+  $rootScope.screenHeight   = dimensions.height + "px";
+  $rootScope.screenWidthNum  =  dimensions.width;
+  $rootScope.screenHeightNum   = dimensions.height;
 
   // var element =angular.element( document.querySelector( '#tabsContainer' ) );
   var deviceWidth = window.innerWidth;

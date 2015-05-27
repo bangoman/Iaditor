@@ -8,6 +8,12 @@
     Done
   </button>  
 </ion-nav-buttons>
+<ion-nav-buttons side="left">
+  <button class="button" ng-click="actionPop($event)">
+    Add
+  </button>
+</ion-nav-buttons>
+
   <div id="container" ng-hide="showMarker" ng-style="iadImg" on-hold="actionPop($event)" style="width:100%;height:100%;margin-top:20px;border:1px solid #000000;margin:0 auto;background-color:#cccccc">
   </div>  
   <div ng-show="showMarker" style="height:100%;width:100%">
