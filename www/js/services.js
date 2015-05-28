@@ -12,6 +12,10 @@ angular.module('iaditor.services', [])
             
             return $http.post(urlBase+'?imgUrl=' + imgUrl +"&y=" + y + "&x="+ x + "&height="+ height +"&width=" + width + "&angle="+angle+"&action=crop");
         };
+        this.rotate = function (imgUrl,angle) {
+            
+            return $http.post(urlBase+'?imgUrl=' + imgUrl +"&angle="+angle+"&action=rotate");
+        };        
         this.saveImage = function(imgUrl){
           	console.log(imgUrl);
             return $http.post(urlBase+'?imgUrl=' + imgUrl  + "&action=save");
