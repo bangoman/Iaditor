@@ -442,13 +442,16 @@ angular.module('iaditor.controllers', [])
     // console.log($ionicPosition.pos ition(e));
     // console.log(topStr);
   }
+  
 
   // Image zoom ( zoom in and zoom out )
   $scope.zoom = function(inOut){
 
-    var screenHeight = parseInt($rootScope.screenHeight.replace("px", ""));
-    var offsetHeight = document.getElementById('img1').offsetHeight;
 
+    var screenHeight = parseInt($rootScope.screenHeight.replace("px", ""));
+    var screenWidth = parseInt($rootScope.screenWidth.replace("px", ""));
+    var offsetHeight = document.getElementById('img1').offsetHeight;
+    var offsetWidth = document.getElementById('img1').offsetWidth;
     var heightStr = $scope.imgStyle.height;
     var height =  parseInt(heightStr.replace("%", ""), 10);
 
@@ -458,12 +461,27 @@ angular.module('iaditor.controllers', [])
     var topStr = $scope.imgStyle.top;
     var top =  parseInt(topStr.replace("px", ""));
 
-    console.log(offsetHeight+"::"+screenHeight);
+    if( height+inOut >= 100 && offsetHeight >= screenHeight ){
 
-    if(height+inOut >= 100){
-      $scope.imgStyle.height = (height+inOut) + "%"; 
-      $scope.imgStyle.left = left+ (( (inOut * screenHeight)/100 )*-1)/2 + "px";
-      $scope.imgStyle.top = top+( ( (inOut * screenHeight)/100 ) * -1 )/2 + "px"; 
+      $scope.imgStyle.height = (height+inOut) + "%";
+
+      if (inOut == 1) {
+
+        $scope.imgStyle.left = left + ((( (inOut * screenWidth)/100 )) *-1 ) + "px";
+        $scope.imgStyle.top = top+( (( (inOut * screenHeight)/100 )) * -1 ) + "px";  
+      } else{
+
+        console.log( offsetHeight );
+        // if ( top <= 0 && offsetHeight >= screenHeight && offsetWidth >= screenWidth) {
+        if ( offsetHeight > 100 ) {
+
+          $scope.imgStyle.left = left + ((( (inOut * screenWidth)/100 ) ) *-1 ) + "px";
+          $scope.imgStyle.top = top+( (( (inOut * screenHeight)/100 ) ) * -1 ) + "px";  
+        }
+      };
+
+      console.log( $scope.imgStyle.top );
+      // console.log( top );
     }
   };
 
