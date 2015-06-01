@@ -409,7 +409,7 @@ angular.module('iaditor.controllers', [])
 
   // Drag Uploaded Image
   $scope.dragging = function(e){
-
+    console.log(e);
     var height = document.getElementById('img1').offsetHeight;
     var width = document.getElementById('img1').offsetWidth;
     var topStr = $scope.imgStyle.top;
@@ -426,21 +426,15 @@ angular.module('iaditor.controllers', [])
       $scope.imgStyle.top = e.gesture.deltaY+"px";
       $scope.imgStyle.top = e.gesture.center.pageY -$scope.imgY + "px";
     }
-    // + (e.gesture.center.pageX -$scope.imgX)
-    //console.log((right)  + "=" + limitRight);
     var l = (e.gesture.center.pageX -$scope.imgX);
     var r = l + width;
-    console.log(r);
+    
     if( (left - $rootScope.offsetLeft) + (e.gesture.center.pageX -$scope.imgX) <= 0 &&  r  > limitRight  ){
-
-      // console.log('enter',width + ( (left + $rootScope.offsetLeft) + (e.gesture.center.pageX -$scope.imgX)) );
       $scope.imgStyle.left = e.gesture.center.pageX - $scope.imgX+ "px";  
     }
     if($scope.imgStyle.left > "0px" ){
         $scope.imgStyle.left = "0px"
     }
-    // console.log($ionicPosition.pos ition(e));
-    // console.log(topStr);
   }
 
   // Image zoom ( zoom in and zoom out )
