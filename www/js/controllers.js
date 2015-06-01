@@ -299,7 +299,7 @@ angular.module('iaditor.controllers', [])
  * @ChatsCtrl
  *
  */
-.controller('ChatsCtrl',[ '$scope','$ionicGesture','$ionicPosition','cropApi', '$rootScope', '$location', '$http', '$state', '$ionicGesture', '$interval', function($scope,$ionicGesture,$ionicPosition,cropApi,$rootScope,$location,$http,$state, $ionicGesture, $interval) {
+.controller('ChatsCtrl',[ '$scope','$ionicGesture','$ionicPosition','cropApi', '$rootScope', '$location', '$http', '$state', '$ionicScrollDelegate', '$interval', function($scope,$ionicGesture,$ionicPosition,cropApi,$rootScope,$location,$http,$state, $ionicScrollDelegate, $interval) {
 
   deviceWidth = window.innerWidth;
   deviceHeight = window.innerHeight;
@@ -403,14 +403,18 @@ angular.module('iaditor.controllers', [])
       // or server returns response with an error status.
     });
   }
+   var x = 0;
+   $scope.toggleZoom= function () {
+        x++;x%2===0?$ionicScrollDelegate.zoomTo(1,true):$ionicScrollDelegate.zoomBy(3, true);
+   };
 
   $scope.getStartPosition = function(e){
     $scope.imgY = e.gesture.center.pageY - e.srcElement.getBoundingClientRect().top;
     $scope.imgX = e.gesture.center.pageX - e.srcElement.getBoundingClientRect().left;
   }
-
+  
   $scope.checkImageUrl($scope.imageUrl);
-  $scope.imgStyle ={"height":"100%","left":"0px","top":"0px"};
+  $scope.imgStyle ={"height":$rootScope.screenHeight,"left":"0px","top":"0px"};
   // alert($scope.imgStyle);
   $scope.img1 =angular.element( document.querySelector( '#img1' ) )
   $ionicGesture.on('dragstart', function(event){$scope.getStartPosition(event)}, $scope.img1);
@@ -490,8 +494,19 @@ angular.module('iaditor.controllers', [])
 
   // Crop image
   $scope.crop = function (imgUrl) {
-    var position = {left:$scope.img1[0].offsetLeft / $rootScope.ratio,top:$scope.img1[0].offsetTop/$rootScope.ratio};    
-    var size = {height:$scope.img1[0].offsetHeight/$rootScope.ratio,width:$scope.img1[0].offsetWidth/$rootScope.ratio};
+    var delegate = $ionicScrollDelegate.$getByHandle('myScroll');
+    //console.log(delegate.getScrollPosition());
+    delegate.resize();
+    console.log(delegate.getScrollPosition().left);
+    var offLeft = delegate.getScrollPosition().left;
+    var offTop = delegate.getScrollPosition().top;
+    var offHeight = $scope.img1[0].offsetHeight * delegate.getScrollPosition().zoom;
+    var offWidth = $scope.img1[0].offsetWidth * delegate.getScrollPosition().zoom;
+    //console.log(""$ionicScrollDelegate.getScrollView().__contentHeight);
+
+    var position = {left:offLeft / $rootScope.ratio,top:offTop/$rootScope.ratio};    
+    var size = {height:offHeight/$rootScope.ratio,width:offWidth/$rootScope.ratio};
+
     cropApi.crop(imgUrl,position.left,position.top,size.height,size.width,$scope.angle)
     .success(function (e) {
       console.log(e);
@@ -502,6 +517,7 @@ angular.module('iaditor.controllers', [])
       console.log(error);
         //$scope.status = 'Unable to insert customer: ' + error.message;
     });
+    
   };  
 
   // Go to Edit page
