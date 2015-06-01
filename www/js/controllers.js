@@ -230,8 +230,8 @@ angular.module('iaditor.controllers', [])
 
   // Drag square box on the top of the image
   $scope.dragging = function(e,count){
+
     if(!$scope.resizing){
-      //console.log(e.gesture.center.pageX)
       var heightStr = e.srcElement.style.height;
       var height =  parseInt(heightStr.replace("px", ""), 10);
       var widthStr = e.srcElement.style.width
@@ -303,6 +303,8 @@ angular.module('iaditor.controllers', [])
 
   deviceWidth = window.innerWidth;
   deviceHeight = window.innerHeight;
+  $scope.dirW = 0;
+  $scope.dirH = 0;
   $scope.calculateAspectRatioFit = function(srcWidth, srcHeight, maxWidth, maxHeight) {
     var ratio = [maxWidth / srcWidth, maxHeight / srcHeight ];
     ratio = Math.min(ratio[0], ratio[1]);
@@ -315,26 +317,29 @@ angular.module('iaditor.controllers', [])
   $rootScope.screenWidth  =  dimensions.width + "px";
   $rootScope.screenHeight   = dimensions.height + "px";
 
-
   console.log( $rootScope.screenWidth+'::'+$rootScope.screenHeight); 
 
   $scope.imageUrl = null;
   $scope.chooseImage=true;
   var element = angular.element(document.querySelector('#img1'));
 
-  // Zoom In 
-  $ionicGesture.on('pinchin', function (event) {
-    $scope.$apply(function () {
-      $scope.zoom(-1);
-    });
-  }, element);
+  // // Zoom In 
+  // $ionicGesture.on('pinchin', function (event) {
 
-  // Zoom Out
-  $ionicGesture.on('pinchout', function (event) {
-    $scope.$apply(function () {
-      $scope.zoom( 1 );
-    });
-  }, element);
+  //   console.log('evcent',event);
+  //   $scope.$apply(function (event) {
+  //     $scope.zoom(-1, event);
+  //   });
+  // }, element);
+
+  // // Zoom Out
+  // $ionicGesture.on('pinchout', function (event) {
+  //   console.log('evcent',event);
+
+  //   $scope.$apply(function (event) {
+  //     $scope.zoom( 1,event );
+  //   });
+  // }, element);
 
   // Get parameter By name
   $scope.getParameterByName = function(name) {
@@ -371,7 +376,10 @@ angular.module('iaditor.controllers', [])
       .success(function (e) {
         $scope.imageUrl = e;
         $scope.chooseImage=false;
-        console.log($scope.imageUrl);
+        // console.log($scope.imageUrl);
+
+        $scope.dirW = document.getElementById('img1').offsetWidth;
+        $scope.dirH = document.getElementById('img1').offsetHeight;
       }).
       error(function(error) {
         console.log(error);
@@ -440,9 +448,13 @@ angular.module('iaditor.controllers', [])
   // Image zoom ( zoom in and zoom out )
   $scope.zoom = function(inOut){
 
-    var screenHeight = parseInt($rootScope.screenHeight.replace("px", ""));
-    var offsetHeight = document.getElementById('img1').offsetHeight;
 
+
+// console.log('zoom',event);
+    var screenHeight = parseInt($rootScope.screenHeight.replace("px", ""));
+    var screenWidth = parseInt($rootScope.screenWidth.replace("px", ""));
+    var offsetHeight = document.getElementById('img1').offsetHeight;
+    var offsetWidth = document.getElementById('img1').offsetWidth;
     var heightStr = $scope.imgStyle.height;
     var height =  parseInt(heightStr.replace("%", ""), 10);
 
@@ -452,12 +464,27 @@ angular.module('iaditor.controllers', [])
     var topStr = $scope.imgStyle.top;
     var top =  parseInt(topStr.replace("px", ""));
 
-    console.log(offsetHeight+"::"+screenHeight);
+    if( height+inOut >= 100 && offsetHeight >= screenHeight ){
 
-    if(height+inOut >= 100){
-      $scope.imgStyle.height = (height+inOut) + "%"; 
-      $scope.imgStyle.left = left+ (( (inOut * screenHeight)/100 )*-1)/2 + "px";
-      $scope.imgStyle.top = top+( ( (inOut * screenHeight)/100 ) * -1 )/2 + "px"; 
+      $scope.imgStyle.height = (height+inOut) + "%";
+
+      if (inOut == 1) {
+
+        $scope.imgStyle.left = left + ((( (inOut * screenWidth)/100 )) *-1 ) + "px";
+        $scope.imgStyle.top = top+( (( (inOut * screenHeight)/100 )) * -1 ) + "px";  
+      } else{
+
+        console.log( offsetHeight );
+        // if ( top <= 0 && offsetHeight >= screenHeight && offsetWidth >= screenWidth) {
+        if ( offsetHeight > 100 ) {
+
+          $scope.imgStyle.left = left + ((( (inOut * screenWidth)/100 ) ) *-1 ) + "px";
+          $scope.imgStyle.top = top+( (( (inOut * screenHeight)/100 ) ) * -1 ) + "px";  
+        }
+      };
+
+      console.log( $scope.imgStyle.top );
+      // console.log( top );
     }
   };
 
